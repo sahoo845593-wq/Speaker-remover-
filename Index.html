@@ -1,0 +1,66 @@
+# Speaker-remover-
+Help to remove from mobile 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Water Eject — Speaker & Vibration</title>
+<meta name="theme-color" content="#0ea5e9" />
+<style>
+  :root{
+    --bg:#0b1220; --card:#0f172a; --muted:#94a3b8; --text:#e2e8f0; --accent:#0ea5e9; --accent2:#38bdf8;
+  }
+  body{
+    margin:0; background:linear-gradient(180deg,#0b1220 0%, #111827 100%); color:var(--text);
+    font-family: system-ui, sans-serif; text-align:center; padding:20px;
+  }
+  h1{color:var(--accent);}
+  button{
+    background:var(--accent); border:none; color:white; padding:15px 20px; font-size:16px;
+    border-radius:10px; cursor:pointer; margin:10px;
+  }
+  button:hover{background:var(--accent2);}
+  .info{color:var(--muted); font-size:14px; margin-top:20px;}
+</style>
+</head>
+<body>
+  <h1>💧 Water Eject</h1>
+  <p>Remove water from your speaker using sound and vibration.</p>
+  <button onclick="startEject()">▶ Start Eject</button>
+  <button onclick="stopEject()">⏹ Stop</button>
+  <div class="info">Make sure your volume is high.</div>
+
+<script>
+let audioCtx, oscillator;
+
+function startEject(){
+  // Start vibration if supported
+  if (navigator.vibrate) {
+    navigator.vibrate([200, 100, 200, 100, 200]);
+  }
+
+  // Start audio tone
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  oscillator = audioCtx.createOscillator();
+  oscillator.type = 'square';
+  oscillator.frequency.setValueAtTime(165, audioCtx.currentTime); // eject frequency
+  oscillator.connect(audioCtx.destination);
+  oscillator.start();
+}
+
+function stopEject(){
+  if (navigator.vibrate) {
+    navigator.vibrate(0);
+  }
+  if (oscillator) {
+    oscillator.stop();
+    oscillator.disconnect();
+  }
+  if (audioCtx) {
+    audioCtx.close();
+  }
+}
+</script>
+</body>
+</html>
